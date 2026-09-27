@@ -1,0 +1,76 @@
+!---muultilayer switch
+  enable
+configure terminal
+vlan 10
+  name sales
+exit
+vlan 20
+name it
+exit
+vlan 30 
+name hr
+exit
+!----assign access ports
+interface range fa0/1-2
+  switchport mode access
+switchport acess vlan 10
+spanning-tree portfast 
+exit
+
+interface range fa0/3-4
+  switchport mode access
+switchport access vlan 20
+spanning-tree portfast
+exit
+
+interface range fa0/5-6
+  switchport mode access
+switchport access vlan 30
+spanning-tree portfast
+exit
+!---trunk to router
+interface gig0/1
+  switchport mode trunk
+switchport trunk allowed vlan 10,20,20
+  no shutdown 
+exit
+end
+copy run start
+
+
+
+!-----router on stick
+enable
+configure terminal
+interface g0/0/0
+  no shutdown
+exit
+!--sub-interfaces fro VLANs
+interface g0/0/0/.10
+  encapsulation dot1q 10
+ip address 192.168.10.10 255.255.255.0
+exit
+
+interface g0/0/0.20
+  encapsualtion dot1q 20
+ip address 192.168.20.1 255.255.255.0
+exit
+
+interfacee g0/0/0.30
+  encapsualtion dot1q 30
+ip address 192.168.30.1 255.255.255.0
+emd
+copy run start
+
+
+
+
+
+!--assigning pcs IP addresses
+pc name                  ip                   subnet mask                 gateway
+pco             192.168.10.10            255.255.255.0              192.168.10.1
+pc1             192.168.10.11            255.255.255.0              192.168.10.1
+pc2             192.168.20.10            255.255.255.0              192.168.20.1
+pc3             192.168.20.11            255.255.255.0              192.168.20.1
+pc4             192.168.30.10            255.255.255.0              192.168.30.1
+pc5             192.168.30.11            255.255.255.0              192.168.30.1
